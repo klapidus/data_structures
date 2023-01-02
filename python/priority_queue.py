@@ -86,24 +86,16 @@ class NaivePriorityQueue(BasePriorityQueue):
         return self._queue.pop(mp_idx)
 
 
-class HeapPriorityQueue(Heap):
+class HeapPriorityQueue(Heap, BasePriorityQueue):
     """Implemented using a heap."""
     def __init__(self):
         super().__init__()
-
-    @property
-    def is_empty(self):
-        pass
-
-    @property
-    def size(self) -> int:
-        pass
 
     def enqueue(self, priority: float) -> None:
         self.insert(priority)
 
     def peek(self) -> Any:
-        pass
+        return self.show_top()
 
     def dequeue(self) -> Any:
         return self.remove_top()
@@ -120,25 +112,8 @@ def time_queue(pq, gen_list: list):
 
 
 if __name__ == "__main__":
-    # pq = NaivePriorityQueue()
-    # assert pq.dequeue() is None
-    # pq.enqueue("item108", 0.1)
-    # pq.enqueue("item7", 1.2)
-    # pq.enqueue("item0", 0.01)
-    # for _ in range(7):
-    #     d = pq.dequeue()
-    #     print(d)
 
-    pq = HeapPriorityQueue()
-    pq.enqueue(0.1)
-    pq.enqueue(1.2)
-    pq.enqueue(0.01)
-    for _ in range(2):
-        print(pq.ar)
-        d = pq.dequeue()
-        print(d)
-
-    N = 1_000_0
+    N = 4_000_0
     gen_list = [random.choice(ascii_uppercase) for _ in range(N)]
 
     # 1. naive pq
@@ -148,22 +123,19 @@ if __name__ == "__main__":
     del npq
 
     # 2. heap-based pq
-    hpq_deque_list = []
     hpq = HeapPriorityQueue()
     start = datetime.now()
     for idx in range(len(gen_list)):
         p = np.random.rand()
         hpq.enqueue(p)  # TODO
     #for _ in range(npq.size):  # TODO
-    for _ in range(len(gen_list)-1):  # TODO
+    for _ in range(len(gen_list)):  # TODO
         d = hpq.dequeue()
-        hpq_deque_list.append(d)
     timing = (datetime.now() - start).total_seconds()
     print(f"Heap-based priority queue with {N} elements: {timing} seconds")
     del hpq
 
     # 3. std library pq
-    std_deque_list = []
     std_pq = PriorityQueue()
     start = datetime.now()
     for idx in range(len(gen_list)):
@@ -171,12 +143,7 @@ if __name__ == "__main__":
         std_pq.put((p, gen_list[idx]))
     for _ in range(len(gen_list)):  # don't rely on qsize?
         d = std_pq.get()
-        std_deque_list.append(d)
     timing = (datetime.now() - start).total_seconds()
     print(f"Std lib priority queue with {N} elements: {timing} seconds")
     del std_pq
-
-    for idx in range(10):
-        print('hpq', hpq_deque_list[idx])
-        print('std', std_deque_list[idx])
 

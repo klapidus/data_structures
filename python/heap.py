@@ -1,13 +1,24 @@
 import numpy as np
 
+
 #            43/1
 #     27/2         24/3
 #  18/4  14/5    3/6  (  )
 # TODO: flexible topmin-topmax
 class Heap:
     def __init__(self):
-        #self.ar = [None, 43, 27, 24, 18, 14, 3]
         self.ar = [None]  # indexing from 1
+
+    @property
+    def size(self) -> int:
+        return len(self.ar) - 1
+
+    @property
+    def is_empty(self) -> int:
+        if len(self.ar) == 1:
+            return True
+        else:
+            return False
 
     def _swap(self, idx1, idx2):
         tmp = self.ar[idx1]
@@ -20,12 +31,17 @@ class Heap:
         idx = len(self.ar) - 1
         while idx > 1:
             parent_idx = idx // 2
-            #print(parent_idx)
-            if self.ar[parent_idx] >= self.ar[idx]:
+            if self.ar[parent_idx] >= self.ar[idx]:  # heap is fine
             #if self.ar[parent_idx] <= self.ar[idx]:
                 break
             self._swap(idx, parent_idx)
             idx = parent_idx
+
+    def show_top(self):
+        if len(self.ar) == 1:
+            return None
+        else:
+            return self.ar[1]
 
     def remove_top(self):
 
@@ -36,7 +52,6 @@ class Heap:
 
         top_el = self.ar[1]
         self.ar[1] = self.ar.pop(-1)
-        #print(self.ar)
         # sift down
         idx = 1
         while True:
@@ -58,7 +73,7 @@ class Heap:
                 #if child2_val < child1_val:
                     child_idx = child2_idx
 
-            if self.ar[child_idx] <= self.ar[idx]:
+            if self.ar[child_idx] <= self.ar[idx]:  # heap is fine
             #if self.ar[child_idx] >= self.ar[idx]:
                 break
             self._swap(idx, child_idx)
@@ -67,7 +82,7 @@ class Heap:
 
 
 if __name__ == "__main__":
-    N = 10
+    N = 20
     h = Heap()
     for _ in range(N):
         h.insert(np.random.randint(1000))
